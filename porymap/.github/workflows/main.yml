@@ -1,0 +1,163 @@
+name: Build Porymap
+permissions:
+  contents: write
+
+on:
+  push:
+    branches:
+    - master
+    - dev
+    tags:
+    - '*'
+  pull_request:
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build-linux:
+    strategy:
+     matrix:
+       qtversion: [5.14.2, 6.8.*]
+    runs-on: ubuntu-latest
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v4
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: ${{ matrix.qtversion }}
+          modules: 'qtcharts'
+          cache: 'true'
+
+      - name: Configure
+        run: qmake porymap.pro
+
+      - name: Compile
+        run: make -j8
+
+  build-macos:
+    strategy:
+     matrix:
+       os: [macos-latest, macos-15-intel]
+    runs-on: ${{ matrix.os }}
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v4
+
+      # We need a separate step to expand matrix.os
+      - name: Set Build Name
+        run: echo "BUILD_NAME=porymap-${{ matrix.os }}" >> $GITHUB_ENV
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          # 6.10 is the first Qt version (by release date) to support macOS 26
+          version: '6.10.*'
+          modules: 'qtcharts'
+          cache: 'true'
+
+      - name: Configure
+        run: qmake -config release porymap.pro
+
+      - name: Compile
+        run: make -j8
+
+      - name: Create Disk Image
+        if: startsWith(github.ref, 'refs/tags/')
+        run: macdeployqt porymap.app -dmg
+
+      - name: Prep Release Directory
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          mkdir ${{ env.BUILD_NAME }}
+          cp porymap.dmg ${{ env.BUILD_NAME }}/porymap.dmg
+          cp RELEASE-README.txt ${{ env.BUILD_NAME }}/README.txt
+
+      - name: Bundle Release Directory
+        if: startsWith(github.ref, 'refs/tags/')
+        run: zip -r ${{ env.BUILD_NAME }}.zip ${{ env.BUILD_NAME }}
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: ${{ env.BUILD_NAME }}.zip
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build-static-windows:
+    if: false  # Windows job is currently disabled; it's failing to find required modules in the Qt build
+    runs-on: windows-latest
+    env:
+      BUILD_NAME: porymap-windows
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v4
+      
+      - uses: dsaltares/fetch-gh-release-asset@master
+        if: steps.cache-static-qt.outputs.cache-hit != 'true'
+        with:
+          repo: 'huderlem/porymap'
+          version: 'tags/qt-static-6.9.0-windows'
+          file: 'Qt-Static-Windows-mingw-6.9.0.zip'
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Unzip Static Qt
+        if: steps.cache-static-qt.outputs.cache-hit != 'true'
+        run: powershell.exe -Command "Expand-Archive -Path Qt-Static-Windows-mingw-6.9.0.zip -DestinationPath ../Qt"
+      
+      - uses: dsaltares/fetch-gh-release-asset@master
+        with:
+          repo: 'huderlem/porymap'
+          version: 'tags/qt-static-6.9.0-windows'
+          file: 'mingw1310_64.zip'
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Unzip mingw
+        run: powershell.exe -Command "Expand-Archive -Path mingw1310_64.zip -DestinationPath ../mingw1310_64"
+      
+      - name: Add Qt Static to PATH
+        run: echo "$env:GITHUB_WORKSPACE/../Qt/6.9.0/bin" | Out-File -Append -FilePath $env:GITHUB_PATH -Encoding utf8
+
+      - name: Add static config to .pro file
+        run: echo "CONFIG += qt static" >> porymap.pro
+      
+      - name: Add static qmake flags to .pro file
+        run: echo "QMAKE_LFLAGS += -static-libgcc -static-libstdc++ -static -lwinpthread" >> porymap.pro
+
+      - name: Run Qmake
+        env:
+          QTDIR: ../Qt/6.9.0
+          QMAKESPEC: ${{ github.workspace }}/../Qt/6.9.0/mkspecs/win32-g++
+        run: |
+          dir $env:GITHUB_WORKSPACE/../Qt/6.9.0/mkspecs
+          qmake.exe -o Makefile porymap.pro "CONFIG+=qtquickcompiler"
+
+      - name: Add mingw to PATH
+        run: echo "$env:GITHUB_WORKSPACE/../mingw1310_64/bin" | Out-File -Append -FilePath $env:GITHUB_PATH -Encoding utf8
+
+      - name: Compile
+        env:
+          QTDIR: ../Qt/6.9.0
+        run: mingw32-make.exe -j8
+      
+      - name: Prep Release Directory
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          mkdir $BUILD_NAME
+          cp release/porymap.exe $BUILD_NAME/porymap.exe
+          cp RELEASE-README.txt $BUILD_NAME/README.txt
+      
+      - name: Bundle Release Directory
+        if: startsWith(github.ref, 'refs/tags/')
+        run: powershell.exe -Command "Compress-Archive -Path $BUILD_NAME -DestinationPath $BUILD_NAME.zip"
+      
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: $BUILD_NAME.zip
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

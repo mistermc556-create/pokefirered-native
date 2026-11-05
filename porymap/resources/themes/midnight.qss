@@ -1,0 +1,411 @@
+/* MIDNIGHT theme for porymap */
+
+/*
+
+    Background #31332b
+    Font       #F8F8F2
+    Highlight  #49483E
+    Accent     #272822
+
+*/
+
+/* General Widgets */
+
+QWidget {
+    background: #31332b;
+    color: #F8F8F2;
+}
+
+QWidget::disabled {
+    background: #31332b;
+    color: #75715E;
+}
+
+QWidget::item:selected {
+    background: #49483E;
+}
+
+QWidget::item:focus {
+    background: #49483E;
+    border: none;
+}
+
+/* Menus */
+
+QMenuBar {
+    background-color: #31332b;
+    padding: 2px;
+    color: #F8F8F2;
+}
+
+QMenuBar:focus {
+    border: 1px solid #272822;
+}
+
+QMenuBar::item {
+    background: transparent;
+    padding: 4px;
+}
+
+QMenuBar::item:selected {
+    padding: 4px;
+    background-color: #272822;
+    border: 0px solid #31332b;
+}
+
+QMenuBar::item:!selected {
+    padding: 4px;
+    background-color: #31332b;
+    border: 0px solid #31332b;
+}
+
+QMenuBar::item:pressed {
+    padding: 4px;
+    border: 0px solid #31332b;
+    background-color: #272822;
+    color: #F8F8F2;
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+}
+
+QMenu {
+    border: 0px solid #272822;
+    color: #F8F8F2;
+    margin: 0px;
+}
+
+QMenu::separator {
+    height: 1px;
+    background-color: #31332b;
+    color: #F8F8F2;
+}
+
+QMenu::icon {
+    margin: 0px;
+    padding-left: 4px;
+}
+
+QMenu::item {
+    background-color: #272822;
+    padding: 4px 24px 4px 24px;
+    border: 1px transparent #272822;
+}
+
+QMenu::item:selected {
+    background: #31332b;
+}
+
+QMenu::indicator {
+    width: 12px;
+    height: 12px;
+    padding-left: 6px;
+}
+
+QMenu::indicator {
+    image: url(":/icons/ui/midnight/checkbox_unchecked.png");
+}
+
+QMenu::indicator:non-exclusive:unchecked {
+    image: url(":/icons/ui/midnight/checkbox_unchecked.png");
+}
+
+QMenu::indicator:non-exclusive:unchecked:selected {
+    image: url(":/icons/ui/midnight/checkbox_unchecked.png");
+}
+
+QMenu::indicator:non-exclusive:checked {
+    image: url(":/icons/ui/midnight/checkbox_checked.png");
+}
+
+QMenu::indicator:non-exclusive:checked:selected {
+    image: url(":/icons/ui/midnight/checkbox_checked.png");
+}
+
+QMenu::indicator:exclusive:unchecked {
+    image: url(":/icons/ui/midnight/checkbox_unchecked.png");
+}
+
+QMenu::indicator:exclusive:unchecked:selected {
+    image: url(":/icons/ui/midnight/checkbox_unchecked.png");
+}
+
+QMenu::indicator:exclusive:checked {
+    image: url(":/icons/ui/midnight/checkbox_checked.png");
+}
+
+QMenu::indicator:exclusive:checked:selected {
+    image: url(":/icons/ui/midnight/checkbox_checked.png");
+}
+
+/* Combo Boxes */
+
+QComboBox {
+    background: #272822;
+    color: #F8F8F2;
+}
+
+QComboBox QAbstractItemView {
+    background: #31332b;
+    color: #BAB8AE;
+    selection-background-color: #49483E;
+}
+
+QComboBox::indicator {
+    background-color: transparent;
+    selection-background-color: transparent;
+    color: transparent;
+    selection-color: transparent;
+}
+
+/* Spin Boxes */
+
+QSpinBox {
+    background: #272822;
+    color: #F8F8F2;
+}
+
+/* Line Edits */
+
+QLineEdit {
+    background: #272822;
+    color: #F8F8F2;
+}
+
+/* Frames, Labels */
+
+#label_spritePixmap {
+    background: #272822;
+    color: #F8F8F2;
+}
+
+/* Checkboxes */
+
+QCheckBox {
+    background-color: #31332b;
+    color: #F8F8F2;
+    spacing: 4px;
+    outline: none;
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+QCheckBox:focus {
+    border: none;
+}
+
+QCheckBox QWidget:disabled {
+    background-color: #49483E;
+    color: #F8F8F2;
+}
+
+QCheckBox::indicator {
+    height: 16px;
+    width: 16px;
+}
+
+QCheckBox::indicator::unchecked {
+    image: url(:/icons/ui/midnight/checkbox_unchecked.png)
+}
+
+QCheckBox::indicator::checked {
+    image: url(":/icons/ui/midnight/checkbox_checked.png");
+}
+
+QCheckBox::indicator:unchecked:hover {
+
+}
+
+QCheckBox::indicator:checked:hover {
+
+}
+
+QCheckBox::indicator:unchecked:disabled {
+    image: url(":/icons/ui/midnight/checkbox_unchecked_disabled.png");
+}
+
+QCheckBox::indicator:checked:disabled {
+    image: url(":/icons/ui/midnight/checkbox_checked_disabled.png");
+}
+
+
+/* Radio Buttons */
+
+QRadioButton {
+    background-color: #31332b;
+    color: #F8F8F2;
+    spacing: 4px;
+    outline: none;
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+QRadioButton:focus {
+    border: none;
+}
+
+QRadioButton QWidget:disabled {
+    background-color: #49483E;
+    color: #F8F8F2;
+}
+
+QRadioButton::indicator {
+    height: 16px;
+    width: 16px;
+}
+
+QRadioButton::indicator::unchecked {
+    image: url(:/icons/ui/midnight/radio_unchecked.png)
+}
+
+QRadioButton::indicator::checked {
+    image: url(":/icons/ui/midnight/radio_checked.png");
+}
+
+QRadioButton::indicator:unchecked:hover {
+
+}
+
+QRadioButton::indicator:checked:hover {
+
+}
+
+QRadioButton::indicator:unchecked:disabled {
+    image: url(":/icons/ui/midnight/radio_unchecked_disabled.png");
+}
+
+QRadioButton::indicator:checked:disabled {
+    image: url(":/icons/ui/midnight/radio_checked_disabled.png");
+}
+
+
+/* Map List View */
+
+QTreeView {
+    background: #272822;
+}
+
+QTreeView::item:hover {
+    background: #49483E;
+}
+
+QTreeView::item:selected {
+    background: #49483E;
+    color: #F8F8F2;
+}
+
+QTreeView::branch {
+    background: #272822;
+}
+
+QTreeView::branch:has-siblings:!adjoins-item {
+    border-image: url(:/icons/ui/midnight/vline.png) 0;
+}
+
+QTreeView::branch:has-siblings:adjoins-item {
+    border-image: url(:/icons/ui/midnight/branch_more.png) 0;
+}
+
+QTreeView::branch:!has-children:!has-siblings:adjoins-item {
+    border-image: url(:/icons/ui/midnight/branch_end.png) 0;
+}
+
+QTreeView::branch:has-children:!has-siblings:closed,
+QTreeView::branch:closed:has-children:has-siblings {
+        border-image: none;
+        image: url(:/icons/ui/midnight/branch_closed.png);
+}
+
+QTreeView::branch:open:has-children:!has-siblings,
+QTreeView::branch:open:has-children:has-siblings  {
+        border-image: none;
+        image: url(:/icons/ui/midnight/branch_open.png);
+}
+
+/* Scroll Bar */
+
+QScrollBar::vertical {
+    background-color: #31332b;
+}
+
+QScrollBar::horizontal {
+    background-color: #31332b;
+}
+
+QScrollBar::handle:horizontal {
+    background-color: #272822;
+    border: 1px solid #31332b;
+}
+
+QScrollBar::handle:vertical {
+    background-color: #272822;
+    border: 1px solid #31332b;
+}
+
+QScrollBar::add-line:horizontal {
+    border: none;
+    background: none;
+    color: none;
+}
+
+QScrollBar::add-line:vertical {
+    border: none;
+    background: none;
+    color: none;
+}
+
+QScrollBar::sub-line:horizontal {
+    border: none;
+    background: none;
+    color: none;
+}
+
+QScrollBar::sub-line:vertical {
+    border: none;
+    background: none;
+    color: none;
+}
+
+QScrollBar::up-arrow:horizontal, QScrollBar::down-arrow:horizontal {
+    background: none;
+}
+
+QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical {
+    background: none;
+}
+
+QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
+    background: none;
+}
+
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+    background: none;
+}
+
+/* Table Headers */
+
+QHeaderView {
+  padding: 0px;
+  margin: 0px;
+  font: 12px;
+}
+
+/* Sliders */
+
+/* Qt doesn't change the style of disabled sliders, so we do it ourselves */
+QSlider::groove:horizontal:disabled {
+    border: 1px solid gray;
+    border-radius: 3px;
+    height: 2px;
+    background: none;
+}
+QSlider::sub-page:horizontal:disabled {
+    background: #B1B1B1;
+}
+QSlider::handle:horizontal:disabled {
+    border: 1px solid #444444;
+    border-radius: 3px;
+    width: 10px;
+    height: 9px;
+    margin: -5px -1px;
+    background: #5C5C5C;
+}

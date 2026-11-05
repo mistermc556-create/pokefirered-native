@@ -1,0 +1,58 @@
+# Run from any directory: make -f /absolute/path/to/Makefile.native test
+# `game` builds the native desktop executable; `test` runs foundation checks.
+ROOT := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
+BUILD := $(ROOT)/build/native
+CC ?= cc
+CPPFLAGS += -iquote $(ROOT)/include -DFIRERED_NATIVE -DFIRERED -DENGLISH -DREVISION=0 -DMODERN=1
+CFLAGS ?= -O2 -g
+CFLAGS += -std=gnu11 -Wall -Wextra -Werror -MMD -MP
+LDFLAGS ?=
+
+SOURCES := platform/native/memory.c platform/native/cpu_copy.c platform/native/decompress.c src/random.c tests/native/test_foundation.c
+OBJECTS := $(addprefix $(BUILD)/,$(SOURCES:.c=.o))
+BINARY := $(BUILD)/foundation-tests
+
+.DEFAULT_GOAL := test
+.DELETE_ON_ERROR:
+.PHONY: test sanitize clean check-game-toolchain
+
+.PHONY: game run smoke test-rival test-encounters test-build
+game:
+	python3 $(ROOT)/tools/native/build_pc.py
+
+run: game
+	$(ROOT)/build/pc/pokefirered
+
+smoke: game
+	python3 $(ROOT)/tools/native/smoke_pc.py
+
+test-rival: game
+	python3 $(ROOT)/tools/native/test_rival.py
+
+test-encounters: game
+	python3 $(ROOT)/tools/native/test_encounters.py
+
+test-build:
+	python3 -B $(ROOT)/tests/native/test_build_dependencies.py
+
+test: $(BINARY)
+	$(BINARY)
+
+$(BINARY): $(OBJECTS)
+	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
+
+$(BUILD)/%.o: $(ROOT)/%.c
+	@mkdir -p $(dir $@)
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+
+sanitize:
+	$(MAKE) -f $(ROOT)/Makefile.native BUILD=$(ROOT)/build/native-sanitize CFLAGS='-O1 -g -std=gnu11 -Wall -Wextra -Werror -MMD -MP -fsanitize=address,undefined -fno-omit-frame-pointer' LDFLAGS='-fsanitize=address,undefined' test
+
+# A diagnostic only. Missing dependencies are not downloaded or installed.
+check-game-toolchain:
+	python3 $(ROOT)/tools/native/check_toolchain.py --cc '$(CC)'
+
+clean:
+	rm -rf $(ROOT)/build/native $(ROOT)/build/native-sanitize
+
+-include $(OBJECTS:.o=.d)
