@@ -1,4 +1,101 @@
-assets_3d/
-build/
-*.gba
+# ==========================================
+# C/C++ Build & Debug Artifacts (Your Original Rules)
+# ==========================================
+# Prerequisites
+*.d
+
+# Object files
+*.o
+*.ko
+*.obj
+*.elf
+
+# Linker output
+*.ilk
+*.map
+*.exp
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Libraries
+*.lib
+*.a
+*.la
+*.lo
+
+# Shared objects (inc. Windows DLLs)
+*.dll
+*.so
+*.so.*
+*.dylib
+
+# Executables
 *.exe
+*.out
+*.app
+*.i*86
+*.x86_64
+*.hex
+
+# Debug files
+*.dSYM/
+*.su
+*.idb
+*.pdb
+*.dwo
+
+# Kernel Module Compile Results
+*.mod*
+*.cmd
+.tmp_versions/
+modules.order
+Module.symvers
+Mkfile.old
+dkms.conf
+
+# Project-Specific
+build/
+bin/
+out/
+Makefile.local
+
+# 3DS Homebrew Cross-Compilation (devkitARM)
+*.3dsx
+*.cia
+*.smdh
+
+# Legal & Asset Protection
+*.gba
+*.sav
+*.sa1
+*.sa2
+*.ram
+/roms/
+/baserom.gba
+baserom*.gba
+
+# 3D Model Assets
+/assets_3d/models/*
+!/assets_3d/models/README.md
+/assets_3d/textures/
+assets_3d/
+assets_3d/*
+battle3d/
+battle3d/*
+
+# IDEs, Editors & AI Metadata
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+*.code-workspace
+.cline/
+.kilocode/
+.idea/
+cmake-build-*/
+.vs/
+*.user
+.DS_Store
+Thumbs.db
